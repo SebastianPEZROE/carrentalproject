@@ -1,19 +1,29 @@
 package com.mxtc.carrentalproject.models;
 
+/**
+ *
+ */
 public class Car {
+    private int car_id;
     private String model;
-    private int numberOfCars;
-    private boolean available;
     private double pricePerHour;
 
     public Car() {
     }
 
-    public Car(String model, int numberOfCars, boolean available, double pricePerHour) {
+    public Car(int car_id, String model, double pricePerHour) {
+        this.car_id = car_id;
         this.model = model;
-        this.numberOfCars = numberOfCars;
-        this.available = available;
         this.pricePerHour = pricePerHour;
+    }
+
+
+    public int getCar_id() {
+        return car_id;
+    }
+
+    public void setCar_id(int car_id) {
+        this.car_id = car_id;
     }
 
     public String getModel() {
@@ -22,22 +32,6 @@ public class Car {
 
     public void setModel(String model) {
         this.model = model;
-    }
-
-    public int getNumberOfCars() {
-        return numberOfCars;
-    }
-
-    public void setNumberOfCars(int numberOfCars) {
-        this.numberOfCars = numberOfCars;
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
     }
 
     public double getPricePerHour() {
@@ -51,9 +45,8 @@ public class Car {
     @Override
     public String toString() {
         return "Car{" +
-                "model='" + model + '\'' +
-                ", numberOfCars=" + numberOfCars +
-                ", status=" + available +
+                "car_id=" + car_id +
+                ", model='" + model + '\'' +
                 ", pricePerHour=" + pricePerHour +
                 '}';
     }
