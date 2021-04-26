@@ -28,6 +28,7 @@ public class carsdbc {
             car.setCar_id(resultSet.getInt("car_id"));
             car.setModel(resultSet.getString("model"));
             car.setPricePerHour(resultSet.getInt("priceperhour"));
+            car.setType(resultSet.getString("type"));
             return car;
         }
     }
@@ -38,18 +39,9 @@ public class carsdbc {
         return cars;
     }
 
-    public List<Car> getAvailableCars(List<rents> notAvailable){
-        if(notAvailable.size() == 0 ){
-            return getAllCars();
-        }else{
-            final String[] sql = {"SELECT * FROM cars WHERE "};
-            notAvailable.forEach(element-> sql[0] = sql[0] +"car_id != " + String.valueOf(element.getCarId()) +" AND ");
-            sql[0] = sql[0].substring(0, sql[0].length()-4);
-            sql[0] = sql[0] +";";
-            List<Car> cars =jdbcTemplate.query(sql[0], new carRowMapper());
-            return cars;
-        }
-
+    public List<Car> getAvailableCars(String sqlStatement){
+        List<Car> cars =jdbcTemplate.query(sqlStatement, new carRowMapper());
+        return cars;
     }
 
 }

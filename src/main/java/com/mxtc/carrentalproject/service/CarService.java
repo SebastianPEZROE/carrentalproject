@@ -55,7 +55,25 @@ public class CarService {
         Timestamp start = Timestamp.valueOf(parameters.getStart());
         Timestamp end = Timestamp.valueOf(parameters.getEnd());
         List<rents> notAvailable = rent.getUnavailableCars(start, end);
-        List<Car> AvailableCars = cars.getAvailableCars(notAvailable);
+        final String[] sql = {"SELECT * FROM cars "};
+
+        if(notAvailable.size()>0){
+            sql[0] = sql[0] + "WHERE ";
+            notAvailable.forEach(element -> sql[0] = sql[0] + "car_id != " + String.valueOf(element.getCarId()) + " AND ");
+            sql[0] = sql[0].substring(0, sql[0].length() - 4);
+        }
+        if (parameters.isOrderByType())
+            sql[0] = sql[0] + "ORDER BY type ;";
+        else if (parameters.isOrderByPrice())
+            sql[0] = sql[0] + "ORDER BY priceperhour ;";
+        else if (parameters.isOrderInvByType())
+            sql[0] = sql[0] + "ORDER BY type DESC ;";
+        else if (parameters.isOrderInvByPrice())
+            sql[0] = sql[0] + "ORDER BY priceperhour DESC ;";
+        else
+            sql[0] = sql[0] + ";";
+        String sqlStatement = sql[0];
+        List<Car> AvailableCars = cars.getAvailableCars(sqlStatement);
         return AvailableCars;
     }
 

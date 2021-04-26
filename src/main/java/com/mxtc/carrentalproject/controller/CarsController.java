@@ -33,4 +33,8 @@ public class CarsController {
     public List<Car> allAvailableCars(@RequestBody RequiredParameters parameters){
         return cs.availableCars(parameters);
     }
+
+    //@PostMapping("/available/orderbytype")
+    //public List<Car>availableCarsOderByType(@RequestBody RequiredParameters parameters);
+
 }

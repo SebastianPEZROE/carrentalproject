@@ -7,14 +7,16 @@ public class Car {
     private int car_id;
     private String model;
     private double pricePerHour;
+    private String type;
 
     public Car() {
     }
 
-    public Car(int car_id, String model, double pricePerHour) {
+    public Car(int car_id, String model, double pricePerHour, String type) {
         this.car_id = car_id;
         this.model = model;
         this.pricePerHour = pricePerHour;
+        this.type = type;
     }
 
 
@@ -42,12 +44,21 @@ public class Car {
         this.pricePerHour = pricePerHour;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "Car{" +
                 "car_id=" + car_id +
                 ", model='" + model + '\'' +
                 ", pricePerHour=" + pricePerHour +
+                ", type='" + type + '\'' +
                 '}';
     }
 }
