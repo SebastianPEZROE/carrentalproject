@@ -2,18 +2,19 @@ package com.mxtc.carrentalproject.models;
 
 import java.time.LocalDateTime;
 
-public class rents {
+public class Rents {
     private int numberOfRent;//number of rent
     private int carId;
     private String clientName;
     private String clientLastname;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private boolean reserved;
 
-    public rents() {
+    public Rents() {
     }
 
-    public rents(int numberOfRent, int carId, String clientName, String clientLastname, LocalDateTime startTime, LocalDateTime endTime) {
+    public Rents(int numberOfRent, int carId, String clientName, String clientLastname, LocalDateTime startTime, LocalDateTime endTime) {
         this.numberOfRent = numberOfRent;
         this.carId = carId;
         this.clientName = clientName;
@@ -70,6 +71,14 @@ public class rents {
         this.endTime = endTime;
     }
 
+    public boolean isReserved() {
+        return reserved;
+    }
+
+    public void setReserved(boolean reserved) {
+        this.reserved = reserved;
+    }
+
     @Override
     public String toString() {
         return "rents{" +
@@ -79,6 +88,7 @@ public class rents {
                 ", clientLastname='" + clientLastname + '\'' +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
+                ", reserved=" + reserved +
                 '}';
     }
 }

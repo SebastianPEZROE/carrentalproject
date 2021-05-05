@@ -1,15 +1,13 @@
 package com.mxtc.carrentalproject.service;
 
-import com.mxtc.carrentalproject.DBC.carsdbc;
-import com.mxtc.carrentalproject.DBC.rentsdbc;
+import com.mxtc.carrentalproject.DBC.CarsDBC;
+import com.mxtc.carrentalproject.DBC.RentsDBC;
 import com.mxtc.carrentalproject.models.Car;
-import com.mxtc.carrentalproject.models.RequiredParameters;
-import com.mxtc.carrentalproject.models.rents;
+import com.mxtc.carrentalproject.models.Rents;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -20,60 +18,33 @@ import java.util.List;
 public class CarService {
     @Autowired
     @Qualifier("carsDB")
-    private carsdbc cars;
+    private CarsDBC cars;
 
     @Autowired
     @Qualifier("rentsDB")
-    private rentsdbc rent;
+    private RentsDBC rent;
 
-    public List<Car> getCars(){
-        return this.cars.getAllCars();
-    }
-
-
-    public List<rents> getAllRents(){
-        return this.rent.getAllRents();
-    }
-
-    public rents getRentById(int id){
+    public Rents getRentById(int id){
         return  this.rent.getRentById(id);
     }
 
-    public rents insertRent(rents newRent){
+    public Rents insertRent(Rents newRent){
         return this.rent.insertRent(newRent);
     }
 
-    public void removeRent( int id){
-        rent.deleteRent(id);
+    public void cancelOrReturnRent(int id){
+        this.rent.cancelRent(id);
     }
 
-    public void updateRent(rents newChange){
+    public void updateRent(Rents newChange){
         rent.updateRent(newChange);
     }
 
-    public List<Car> availableCars(RequiredParameters parameters) {
-        Timestamp start = Timestamp.valueOf(parameters.getStart());
-        Timestamp end = Timestamp.valueOf(parameters.getEnd());
-        List<rents> notAvailable = rent.getUnavailableCars(start, end);
-        final String[] sql = {"SELECT * FROM cars "};
-
-        if(notAvailable.size()>0){
-            sql[0] = sql[0] + "WHERE ";
-            notAvailable.forEach(element -> sql[0] = sql[0] + "car_id != " + String.valueOf(element.getCarId()) + " AND ");
-            sql[0] = sql[0].substring(0, sql[0].length() - 4);
-        }
-        if (parameters.isOrderByType())
-            sql[0] = sql[0] + "ORDER BY type ;";
-        else if (parameters.isOrderByPrice())
-            sql[0] = sql[0] + "ORDER BY priceperhour ;";
-        else if (parameters.isOrderInvByType())
-            sql[0] = sql[0] + "ORDER BY type DESC ;";
-        else if (parameters.isOrderInvByPrice())
-            sql[0] = sql[0] + "ORDER BY priceperhour DESC ;";
-        else
-            sql[0] = sql[0] + ";";
-        String sqlStatement = sql[0];
-        List<Car> AvailableCars = cars.getAvailableCars(sqlStatement);
+    public List<Car> availableCars(String start, String end, String type, String order, boolean asc){//RequiredParameters parameters) {
+        //Timestamp start = Timestamp.valueOf(parameters.getStart());
+        //Timestamp end = Timestamp.valueOf(parameters.getEnd());
+        List<Rents> notAvailable = rent.getUnavailableCars(start, end);
+        List<Car> AvailableCars = cars.getAvailableCars(notAvailable, type, order, asc);
         return AvailableCars;
     }
 
