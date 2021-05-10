@@ -48,15 +48,17 @@ public class CarsDBC {
             sqlStatement = sqlStatement.substring(0, sqlStatement.length() - 4);
         }
         if (order.equals("type") && asc)
-            sqlStatement = sqlStatement + "ORDER BY type ;";
+            sqlStatement = sqlStatement + "ORDER BY type ";
         else if (order.equals("price") && asc)
-            sqlStatement = sqlStatement + "ORDER BY priceperhour ;";
+            sqlStatement = sqlStatement + "ORDER BY priceperhour ";
         else if (order.equals("type") && !asc)
             sqlStatement = sqlStatement + "ORDER BY type DESC ;";
         else if (order.equals("price") && !asc)
             sqlStatement = sqlStatement + "ORDER BY priceperhour DESC ;";
+        else if (order.equals("") && asc)
+            sqlStatement = sqlStatement + "ORDER BY model;";
         else
-            sqlStatement = sqlStatement + ";";
+            sqlStatement = sqlStatement + "ORDER BY model DESC";
         List<Car> cars =jdbcTemplate.query(sqlStatement, new carRowMapper());
         return cars;
     }

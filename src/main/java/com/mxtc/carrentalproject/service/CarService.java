@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -40,14 +41,35 @@ public class CarService {
         rent.updateRent(newChange);
     }
 
-    public List<Car> availableCars(String start, String end, String type, String order, boolean asc){//RequiredParameters parameters) {
-        //Timestamp start = Timestamp.valueOf(parameters.getStart());
-        //Timestamp end = Timestamp.valueOf(parameters.getEnd());
+    public List<Car> availableCars(String start, String end, String type, String order, boolean asc){
+        LocalDateTime startDateTime = LocalDateTime.parse(start);
+        LocalDateTime endDateTime = LocalDateTime.parse(end);
+
+        int hours = getPeriod(startDateTime, endDateTime);
         List<Rents> notAvailable = rent.getUnavailableCars(start, end);
         List<Car> AvailableCars = cars.getAvailableCars(notAvailable, type, order, asc);
-        return AvailableCars;
+        List<Car> availableCarsWithTotalPrice = setTotalPriceToEachCar(AvailableCars, hours);
+        return availableCarsWithTotalPrice;
     }
 
+    private int getPeriod(LocalDateTime start, LocalDateTime end){
+        LocalDateTime period = end.minusSeconds(start.getSecond());
+        period = period.minusMinutes(start.getMinute());
+        period = period.minusHours(start.getHour());
+        int years = period.getYear() -start.getYear();
+        int months = period.getMonthValue() - start.getMonthValue();
+        int days = period.getDayOfMonth() - start.getDayOfMonth();
+        int hours = period.getHour() + (days *24) + (months*30*24) + (years*12*30*24);
+        return hours;
+    }
 
+    private List<Car> setTotalPriceToEachCar(List<Car> cars, int hours){
+        List<Car> output = cars;
+        for(Car car: output ){
+            int totalPrice = (int) (car.getPricePerHour() * hours);
+            car.setTotalPrice(totalPrice);
+        }
+        return output;
+    }
 
 }

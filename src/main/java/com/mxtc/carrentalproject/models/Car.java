@@ -8,6 +8,7 @@ public class Car {
     private String model;
     private double pricePerHour;
     private String type;
+    private int totalPrice;
 
     public Car() {
     }
@@ -50,6 +51,14 @@ public class Car {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     @Override
