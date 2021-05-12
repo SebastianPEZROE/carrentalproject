@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +45,8 @@ public class CarService {
     public List<Car> availableCars(String start, String end, String type, String order, boolean asc){
         LocalDateTime startDateTime = LocalDateTime.parse(start);
         LocalDateTime endDateTime = LocalDateTime.parse(end);
-
+        if(startDateTime.isAfter(endDateTime))
+            return new ArrayList<Car>();
         int hours = getPeriod(startDateTime, endDateTime);
         List<Rents> notAvailable = rent.getUnavailableCars(start, end);
         List<Car> AvailableCars = cars.getAvailableCars(notAvailable, type, order, asc);
