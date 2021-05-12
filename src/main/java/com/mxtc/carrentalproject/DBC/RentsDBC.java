@@ -80,10 +80,4 @@ public class RentsDBC {
         jdbcTemplate.update(sql, id);
     }
 
-    public List<Rents> getUnavailableCars(String startTime, String endTime){
-        String sql = "SELECT * FROM rents WHERE start_time < ? AND end_time > ? AND reserved = true";
-        List<Rents> notAvailableCars = jdbcTemplate.query(sql,new rentRowMapper(),new Object[]{endTime, startTime});
-        return notAvailableCars;
-    }
-
 }

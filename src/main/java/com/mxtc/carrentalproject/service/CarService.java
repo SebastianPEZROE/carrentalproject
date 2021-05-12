@@ -48,8 +48,8 @@ public class CarService {
         if(startDateTime.isAfter(endDateTime))
             return new ArrayList<Car>();
         int hours = getPeriod(startDateTime, endDateTime);
-        List<Rents> notAvailable = rent.getUnavailableCars(start, end);
-        List<Car> AvailableCars = cars.getAvailableCars(notAvailable, type, order, asc);
+
+        List<Car> AvailableCars = cars.getAvailableCars(start,end, type, order, asc);
         List<Car> availableCarsWithTotalPrice = setTotalPriceToEachCar(AvailableCars, hours);
         return availableCarsWithTotalPrice;
     }

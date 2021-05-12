@@ -33,20 +33,12 @@ public class CarsDBC {
         }
     }
 
-    public List<Car> getAvailableCars(List<Rents> notAvailableCars, String type, String order, boolean asc){
-        String sqlStatement = "SELECT * FROM cars ";
-        if(notAvailableCars.size() > 0 || !type.equals("")){
-            sqlStatement = sqlStatement + "WHERE ";
-            if(notAvailableCars.size() > 0){
-                for(Rents element: notAvailableCars){
-                    sqlStatement = sqlStatement + "car_id != " + String.valueOf(element.getCarId()) + " AND ";
-                }
-            }
-            if(!type.equals("")){
-                sqlStatement = sqlStatement + " type = '" + type + "' AND ";
-            }
-            sqlStatement = sqlStatement.substring(0, sqlStatement.length() - 4);
-        }
+    public List<Car> getAvailableCars(String start, String end, String type, String order, boolean asc){
+        String sqlStatement = "SELECT * FROM cars WHERE cars.car_id NOT IN(" +
+                "SELECT rents.car_id FROM rents WHERE start_time < ? AND end_time > ? AND reserved = true) ";
+        if (!type.equals(""))
+            sqlStatement = sqlStatement +" AND type = '" + type + "' ";
+
         if (order.equals("type") && asc)
             sqlStatement = sqlStatement + "ORDER BY type ";
         else if (order.equals("price") && asc)
@@ -59,7 +51,10 @@ public class CarsDBC {
             sqlStatement = sqlStatement + "ORDER BY model;";
         else
             sqlStatement = sqlStatement + "ORDER BY model DESC";
-        List<Car> cars =jdbcTemplate.query(sqlStatement, new carRowMapper());
+
+        System.out.println(sqlStatement);
+
+        List<Car> cars =jdbcTemplate.query(sqlStatement, new carRowMapper(), new Object[]{end, start});
         return cars;
     }
 
